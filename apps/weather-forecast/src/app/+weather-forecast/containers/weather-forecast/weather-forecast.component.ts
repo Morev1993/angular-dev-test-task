@@ -1,32 +1,35 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {WeatherForecastFacade} from "../../+state/weather-forecast.facade";
-import {debounceTime, distinctUntilChanged, Observable, of, tap} from "rxjs";
-import {City} from "../../+state/weather-forecast.models";
+import {debounceTime, distinctUntilChanged, filter, fromEvent, map, Observable} from "rxjs";
+import {City, WeatherForecastData} from "../../+state/weather-forecast.models";
 
 @Component({
 	selector: 'bp-weather-forecast',
 	templateUrl: './weather-forecast.component.html',
 	styleUrls: ['./weather-forecast.component.scss']
 })
-export class WeatherForecastComponent {
+export class WeatherForecastComponent implements AfterViewInit {
+	@ViewChild('input') searchInput: ElementRef<HTMLInputElement>;
+
 	city$: Observable<City>;
+	weatherForecast$: Observable<WeatherForecastData>;
 
 	constructor(public weatherForecastFacade: WeatherForecastFacade) {
 		this.city$ = this.weatherForecastFacade.city$;
-
-		this.city$.subscribe(value => {
-			console.log('city$', value);
-		})
+		this.weatherForecast$ = this.weatherForecastFacade.weatherForecast$;
 	}
 
-	loadCity(event: any) {
-		of(event.target.value).pipe(
+	ngAfterViewInit() {
+		fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
 			debounceTime(700),
+			filter((event: any) => {
+				return event.target && !!event.target.value;
+			}),
+			map((event: any) => event.target.value),
 			distinctUntilChanged(),
-			tap((value) => {
-				console.log(value);
-				this.weatherForecastFacade.loadLocations(value)
-			})
-		).subscribe();
+		).subscribe((value) => {
+			this.weatherForecastFacade.loadLocations(value)
+		});
+
 	}
 }

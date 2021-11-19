@@ -9,5 +9,12 @@
 		{
 			"path": "./tsconfig.editor.json"
 		}
-	]
+	],
+	"compilerOptions": {
+		"strictPropertyInitialization": false,
+		"paths": {
+			"@app/*": ["app/*"],
+			"@app/environments/*": ["environments/*"]
+		}
+	}
 }

@@ -11,7 +11,7 @@ export class WeatherForecastFacade {
 	 * and expose them as observables through the facade.
 	 */
 	loading$ = this.store.pipe(select(WeatherForecastSelectors.getWeatherForecastLoading));
-	allWeatherForecast$ = this.store.pipe(select(WeatherForecastSelectors.getAllWeatherForecast));
+	weatherForecast$ = this.store.pipe(select(WeatherForecastSelectors.getAllWeatherForecast));
 
 	city$ = this.store.pipe(select(WeatherForecastSelectors.getCity));
 

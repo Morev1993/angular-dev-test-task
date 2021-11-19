@@ -1,4 +1,17 @@
-<input type="text" (keyup)="loadCity($event)">
-<div *ngIf="(city$ | async) as city">
-	{{city.name}}
-</div>
+<input #input type="text">
+
+<!--<table>-->
+<!--	<thead>-->
+<!--		<tr>-->
+<!--			<th>City name</th>-->
+<!--			<th></th>-->
+<!--		</tr>-->
+<!--	</thead>-->
+<!--	<tbody>-->
+<!--		<ng-container *ngIf="(city$ | async as city) && (weatherForecast$ | async as weather)">-->
+<!--			<tr>-->
+<!--				<td>{{(city$ | async as city)?.lat}}</td>-->
+<!--			</tr>-->
+<!--		</ng-container>-->
+<!--	</tbody>-->
+<!--</table>-->

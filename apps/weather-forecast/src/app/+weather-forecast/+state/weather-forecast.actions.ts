@@ -1,11 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import {City, WeatherForecastItem} from './weather-forecast.models';
+import {City, WeatherForecastData} from './weather-forecast.models';
 
 export const loadWeatherForecast = createAction('[WeatherForecast] Load');
 
 export const loadWeatherForecastSuccess = createAction(
 	'[WeatherForecast/API] Load WeatherForecast Success',
-	props<{ weatherForecast: WeatherForecastItem[] }>()
+	props<{ data: WeatherForecastData }>()
 );
 
 export const loadWeatherForecastFailure = createAction(

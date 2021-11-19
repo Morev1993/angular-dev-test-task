@@ -6,16 +6,20 @@ export interface City {
 	lon: string;
 }
 
-export interface WeatherForecast {
+export interface WeatherForecastState {
 	mode: WeatherForecastMode;
-	items: WeatherForecastItem[];
 	loading: false;
 	currentCity: City;
 }
 
-export interface WeatherForecastItem {
+export interface WeatherForecastData {
 	lat: string;
 	lon: string;
-	hourly: unknown[];
-	daily: unknown[];
+	hourly?: unknown[];
+	daily?: unknown[];
+}
+
+export interface WeatherForecastTable {
+	columns: any[];
+	rows: any[];
 }
