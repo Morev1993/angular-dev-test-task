@@ -1,4 +1,4 @@
-import {WeatherForecastMode} from "../constants/weather-forecast.constants";
+import { WeatherForecastModes } from '../constants/weather-forecast.constants';
 
 export interface City {
 	name: string;
@@ -7,19 +7,13 @@ export interface City {
 }
 
 export interface WeatherForecastState {
-	mode: WeatherForecastMode;
 	loading: false;
 	currentCity: City;
 }
 
 export interface WeatherForecastItem {temp: string}
 
-export interface WeatherForecastData {
-	lat: string;
-	lon: string;
-	hourly?: WeatherForecastItem[];
-	daily?: WeatherForecastItem[];
-}
+export type WeatherForecastData = {[key in keyof typeof WeatherForecastModes]?: WeatherForecastItem[] };
 
 export interface WeatherForecastTable {
 	columns: any[];

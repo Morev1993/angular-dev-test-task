@@ -6,11 +6,13 @@ export const getWeatherForecastState = createFeatureSelector<State>(WEATHER_FORE
 
 const { selectEntities } = weatherForecastAdapter.getSelectors();
 
+export const getWeatherForecastStateData = createSelector(getWeatherForecastState, (state: State) => state);
+
 export const getWeatherForecastLoading = createSelector(getWeatherForecastState, (state: State) => state.loading);
 
 export const getWeatherForecastError = createSelector(getWeatherForecastState, (state: State) => state.error);
 
-export const getAllWeatherForecast = createSelector(getWeatherForecastState, (state: State) => state.data);
+export const getAllWeatherItems = createSelector(getWeatherForecastState, (state: State) => state.data[state.mode]);
 
 export const getWeatherForecastEntities = createSelector(getWeatherForecastState, (state: State) =>
 	selectEntities(state)
@@ -18,4 +20,8 @@ export const getWeatherForecastEntities = createSelector(getWeatherForecastState
 
 export const getCity = createSelector(getWeatherForecastState, (state: State) =>
 	state.currentCity
+);
+
+export const getMode = createSelector(getWeatherForecastState, (state: State) =>
+	state.mode
 );

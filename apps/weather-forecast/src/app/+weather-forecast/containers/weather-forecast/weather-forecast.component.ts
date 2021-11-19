@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {WeatherForecastFacade} from "../../+state/weather-forecast.facade";
 import {debounceTime, distinctUntilChanged, filter, fromEvent, map, Observable} from "rxjs";
-import {City, WeatherForecastData} from "../../+state/weather-forecast.models";
-import {WeatherForecastMode} from "../../constants/weather-forecast.constants";
+import { City, WeatherForecastItem } from '../../+state/weather-forecast.models';
+import {WeatherForecastModes} from "../../constants/weather-forecast.constants";
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'bp-weather-forecast',
@@ -13,16 +14,28 @@ export class WeatherForecastComponent implements AfterViewInit {
 	@ViewChild('input') searchInput: ElementRef<HTMLInputElement>;
 
 	city$: Observable<City>;
-	weatherForecast$: Observable<WeatherForecastData>;
+	mode$: Observable<WeatherForecastModes>;
+	weather$: Observable<WeatherForecastItem[]>;
+	searchQueryParam$: Observable<string>;
 
-	mode = WeatherForecastMode;
+	modesEnum = WeatherForecastModes;
 
-	constructor(public weatherForecastFacade: WeatherForecastFacade) {
+	modes = [WeatherForecastModes.hourly, WeatherForecastModes.daily];
+
+	constructor(public weatherForecastFacade: WeatherForecastFacade, private router: Router) {
 		this.city$ = this.weatherForecastFacade.city$;
-		this.weatherForecast$ = this.weatherForecastFacade.weatherForecast$;
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		this.weather$ = this.weatherForecastFacade.weatherForecast$;
+		this.searchQueryParam$ = this.weatherForecastFacade.searchQueryParam$;
+
+		this.mode$ = this.weatherForecastFacade.mode$;
+
 	}
 
 	ngAfterViewInit() {
+		this.weatherForecastFacade.loadLocations('');
+
 		fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
 			debounceTime(700),
 			filter((event: any) => {
@@ -31,8 +44,27 @@ export class WeatherForecastComponent implements AfterViewInit {
 			map((event: any) => event.target.value),
 			distinctUntilChanged(),
 		).subscribe((value) => {
-			this.weatherForecastFacade.loadLocations(value)
+			this.weatherForecastFacade.loadLocations(value);
+			this.navigate({
+				city: value
+			});
 		});
 
+	}
+
+	changeMode(mode: WeatherForecastModes) {
+		this.weatherForecastFacade.changeMode(mode);
+		this.navigate({
+			mode
+		});
+	}
+
+	navigate(queryParams: {
+		[key: string]: string;
+	}) {
+		this.router.navigate(['weather-forecast'], {
+			queryParams,
+			queryParamsHandling: 'merge'
+		})
 	}
 }

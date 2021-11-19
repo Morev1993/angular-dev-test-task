@@ -8,6 +8,7 @@ import { environment } from '../environments/environment';
 import {AppRoutingModule} from "./app-routing.module";
 import { AppComponent } from './core/containers/app.component';
 import {CoreModule} from "./core/core.module";
+import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
 	imports: [
@@ -25,7 +26,9 @@ import {CoreModule} from "./core/core.module";
 		EffectsModule.forRoot([]),
 		!environment.production ? StoreDevtoolsModule.instrument() : [],
 		StoreModule.forRoot(
-			{},
+			{
+				router: routerReducer
+			},
 			{
 				metaReducers: !environment.production ? [] : [],
 				runtimeChecks: {
@@ -37,6 +40,7 @@ import {CoreModule} from "./core/core.module";
 		StoreDevtoolsModule.instrument({
 			name: 'Weather forecast App',
 		}),
+		StoreRouterConnectingModule.forRoot(),
 		CoreModule,
 		AppRoutingModule,
 	],

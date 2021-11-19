@@ -7,47 +7,71 @@ import {LocationService} from "../services/location.service";
 import {WeatherService} from "../services/weather.service";
 import {select, Store} from "@ngrx/store";
 import * as WeatherForecastSelectors from "./weather-forecast.selectors";
-import {WeatherForecastData} from "./weather-forecast.models";
+import { selectQueryParams } from '../../router.selectors';
+import { WeatherForecastModes } from '../constants/weather-forecast.constants';
 
 @Injectable()
 export class WeatherForecastEffects {
 	loadWeather$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(WeatherForecastActions.loadWeatherForecast, WeatherForecastActions.loadLocationsSuccess),
-			withLatestFrom(this.store.pipe(select(WeatherForecastSelectors.getCity))),
-			switchMap(([action, city]) => {
-				if (!city) {
-					return of(WeatherForecastActions.loadWeatherForecastSuccess({ data: {} as WeatherForecastData }));
+			ofType(
+				WeatherForecastActions.loadWeatherForecast,
+				WeatherForecastActions.loadLocationsSuccess,
+				WeatherForecastActions.changeMode
+			),
+			withLatestFrom(
+				this.store.pipe(select(WeatherForecastSelectors.getWeatherForecastStateData)),
+				this.store.pipe(select(selectQueryParams))
+			),
+
+			switchMap(([, state, queryParams]) => {
+				const {currentCity, data} = state;
+
+				if (!currentCity) {
+					return of(WeatherForecastActions.loadWeatherForecastSuccess({ data: {} }));
 				}
 
-				return this.weatherService.getWeatherHourly(city.lat, city.lon)
+				const {lat, lon} = currentCity;
+				const mode = !queryParams.mode ? state.mode : queryParams.mode as WeatherForecastModes;
+
+				if (data[mode]) {
+					return of(WeatherForecastActions.loadWeatherForecastSuccess({ data }));
+				}
+
+				return this.weatherService.getWeather(lat, lon, mode)
 					.pipe(
-						map((data) => WeatherForecastActions.loadWeatherForecastSuccess({ data: data as any })),
+						map((data) => WeatherForecastActions.loadWeatherForecastSuccess({
+							data
+						})),
 						catchError(() => of(WeatherForecastActions.loadWeatherForecastFailure({ error: null })))
 					)
-				}
-			),
+			}),
 		)
 	);
 
 	loadCity$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(WeatherForecastActions.loadLocations),
-			switchMap((action) => this.locationsService.getCities(action.query)
-				.pipe(
-					map((currentCity) => {
-						return WeatherForecastActions.loadLocationsSuccess({ currentCity: currentCity as any });
-					}),
-					catchError(() => of(WeatherForecastActions.loadLocationsFailure({ error: null })))
-				)
+			withLatestFrom(this.store.pipe(select(selectQueryParams))),
+			switchMap(([action, queryParams]) => {
+				console.log('queryParams', queryParams);
+				return this.locationsService.getCities(action.query || queryParams.city)
+					.pipe(
+						map((currentCity) => {
+							return WeatherForecastActions.loadLocationsSuccess({ currentCity });
+						}),
+						catchError(() => of(WeatherForecastActions.loadLocationsFailure({ error: null })))
+					)
+				}
 			),
 		)
 	);
 
 
-	constructor(private readonly actions$: Actions,
-				private locationsService: LocationService,
-				private weatherService: WeatherService,
-				private readonly store: Store
+	constructor(
+		private readonly actions$: Actions,
+		private locationsService: LocationService,
+		private weatherService: WeatherService,
+		private readonly store: Store
 	) {}
 }

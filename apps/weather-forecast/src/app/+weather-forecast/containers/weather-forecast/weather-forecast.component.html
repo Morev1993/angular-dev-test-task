@@ -1,26 +1,41 @@
 <div class="mb-3">
 	<label for="search-input" class="form-label">City</label>
-	<input #input type="text" class="form-control" id="search-input" placeholder="Type please city name">
+	<input #input type="text" class="form-control" id="search-input" placeholder="Type please city name" [value]="searchQueryParam$ | async">
 </div>
 
-<ng-container *ngIf="weatherForecast$ | async as weather">
-	<table class="table">
-		<thead>
-		<tr>
-			<th>City name</th>
-			<td *ngFor="let item of weather[mode.HOURLY];">
-				{{item.temp}}
-			</td>
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-			<td>{{(city$ | async)?.name}}</td>
-			<td *ngFor="let item of weather[mode.HOURLY]">
-				{{item.temp}}
-			</td>
+<ng-container *ngIf="mode$ | async as mode">
+	<ul class="nav nav-tabs">
+		<li class="nav-item" *ngFor="let item of modes">
+			<a class="nav-link" [class.active]="mode === item" (click)="changeMode(item)">{{item}}</a>
+		</li>
+	</ul>
 
-		</tr>
-		</tbody>
-	</table>
+	<ng-container>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+				<tr>
+					<th [style.minWidth.px]="200">City name</th>
+					<th *ngFor="let item of weather$ | async;"></th>
+				</tr>
+				</thead>
+				<tbody>
+					<ng-container *ngIf="weather$ | async as weather">
+						<tr>
+							<td>{{(city$ | async)?.name}}</td>
+							<td *ngFor="let item of weather">
+								{{item.temp}}
+							</td>
+
+						</tr>
+					</ng-container>
+					<ng-container *ngIf="!(weather$ | async)">
+						<tr>
+							<td colspan="6">Not data</td>
+						</tr>
+					</ng-container>
+				</tbody>
+			</table>
+		</div>
 </ng-container>
+
