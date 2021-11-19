@@ -3,7 +3,6 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
 import * as WeatherForecastActions from './weather-forecast.actions';
-import * as WeatherForecastFeature from './weather-forecast.reducer';
 
 @Injectable()
 export class WeatherForecastEffects {

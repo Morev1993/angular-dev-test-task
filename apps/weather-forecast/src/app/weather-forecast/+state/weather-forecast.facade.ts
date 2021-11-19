@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { select, Store, Action } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
 import * as WeatherForecastActions from './weather-forecast.actions';
-import * as WeatherForecastFeature from './weather-forecast.reducer';
 import * as WeatherForecastSelectors from './weather-forecast.selectors';
 
 @Injectable()
