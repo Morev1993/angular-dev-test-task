@@ -6,6 +6,8 @@
 
 export const environment = {
 	production: false,
+	weatherMapBaseUrl: 'https://api.openweathermap.org',
+	weatherMapAoiKey: '0dbb227b5ba47ff4c5dae7676f6f4614'
 };
 
 /*
