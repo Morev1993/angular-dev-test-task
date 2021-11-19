@@ -1,0 +1,4 @@
+<input type="text" (keyup)="loadCity($event)">
+<div *ngIf="(city$ | async) as city">
+	{{city.name}}
+</div>

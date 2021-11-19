@@ -10,17 +10,21 @@ export class WeatherForecastFacade {
 	 * Combine pieces of state using createSelector,
 	 * and expose them as observables through the facade.
 	 */
-	loaded$ = this.store.pipe(select(WeatherForecastSelectors.getWeatherForecastLoaded));
+	loading$ = this.store.pipe(select(WeatherForecastSelectors.getWeatherForecastLoading));
 	allWeatherForecast$ = this.store.pipe(select(WeatherForecastSelectors.getAllWeatherForecast));
-	selectedWeatherForecast$ = this.store.pipe(select(WeatherForecastSelectors.getSelected));
+
+	city$ = this.store.pipe(select(WeatherForecastSelectors.getCity));
+
 
 	constructor(private readonly store: Store) {}
 
-	/**
-	 * Use the initialization action to perform one
-	 * or more tasks in your Effects.
-	 */
-	init() {
-		this.store.dispatch(WeatherForecastActions.init());
+	loadWeather() {
+		this.store.dispatch(WeatherForecastActions.loadWeatherForecast());
+	}
+
+	loadLocations(query: string) {
+		this.store.dispatch(WeatherForecastActions.loadLocations({
+			query
+		}));
 	}
 }

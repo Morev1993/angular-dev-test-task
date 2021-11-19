@@ -10,7 +10,6 @@ import { WeatherForecastEffects } from './weather-forecast.effects';
 import { WeatherForecastFacade } from './weather-forecast.facade';
 import { WeatherForecastEntity } from './weather-forecast.models';
 import { WEATHER_FORECAST_FEATURE_KEY, State, initialState, reducer } from './weather-forecast.reducer';
-import * as WeatherForecastSelectors from './weather-forecast.selectors';
 
 interface TestSchema {
 	weatherForecast: State;
