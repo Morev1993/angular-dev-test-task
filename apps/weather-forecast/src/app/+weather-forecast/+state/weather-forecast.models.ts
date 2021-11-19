@@ -12,11 +12,13 @@ export interface WeatherForecastState {
 	currentCity: City;
 }
 
+export interface WeatherForecastItem {temp: string}
+
 export interface WeatherForecastData {
 	lat: string;
 	lon: string;
-	hourly?: unknown[];
-	daily?: unknown[];
+	hourly?: WeatherForecastItem[];
+	daily?: WeatherForecastItem[];
 }
 
 export interface WeatherForecastTable {

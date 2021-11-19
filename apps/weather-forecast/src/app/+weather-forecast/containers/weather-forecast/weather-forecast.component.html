@@ -1,17 +1,26 @@
-<input #input type="text">
+<div class="mb-3">
+	<label for="search-input" class="form-label">City</label>
+	<input #input type="text" class="form-control" id="search-input" placeholder="Type please city name">
+</div>
 
-<!--<table>-->
-<!--	<thead>-->
-<!--		<tr>-->
-<!--			<th>City name</th>-->
-<!--			<th></th>-->
-<!--		</tr>-->
-<!--	</thead>-->
-<!--	<tbody>-->
-<!--		<ng-container *ngIf="(city$ | async as city) && (weatherForecast$ | async as weather)">-->
-<!--			<tr>-->
-<!--				<td>{{(city$ | async as city)?.lat}}</td>-->
-<!--			</tr>-->
-<!--		</ng-container>-->
-<!--	</tbody>-->
-<!--</table>-->
+<ng-container *ngIf="weatherForecast$ | async as weather">
+	<table class="table">
+		<thead>
+		<tr>
+			<th>City name</th>
+			<td *ngFor="let item of weather[mode.HOURLY];">
+				{{item.temp}}
+			</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>{{(city$ | async)?.name}}</td>
+			<td *ngFor="let item of weather[mode.HOURLY]">
+				{{item.temp}}
+			</td>
+
+		</tr>
+		</tbody>
+	</table>
+</ng-container>

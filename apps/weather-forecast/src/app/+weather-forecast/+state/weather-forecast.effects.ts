@@ -20,7 +20,7 @@ export class WeatherForecastEffects {
 					return of(WeatherForecastActions.loadWeatherForecastSuccess({ data: {} as WeatherForecastData }));
 				}
 
-				return this.weatherService.getWeatherDaily(city.lat, city.lon)
+				return this.weatherService.getWeatherHourly(city.lat, city.lon)
 					.pipe(
 						map((data) => WeatherForecastActions.loadWeatherForecastSuccess({ data: data as any })),
 						catchError(() => of(WeatherForecastActions.loadWeatherForecastFailure({ error: null })))

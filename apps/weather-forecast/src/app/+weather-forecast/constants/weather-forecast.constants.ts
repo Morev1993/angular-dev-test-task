@@ -1,4 +1,4 @@
 export enum WeatherForecastMode {
-	HOURLY,
-	DAILY
+	HOURLY = 'hourly',
+	DAILY = 'daily'
 }

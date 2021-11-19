@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {WeatherForecastFacade} from "../../+state/weather-forecast.facade";
 import {debounceTime, distinctUntilChanged, filter, fromEvent, map, Observable} from "rxjs";
 import {City, WeatherForecastData} from "../../+state/weather-forecast.models";
+import {WeatherForecastMode} from "../../constants/weather-forecast.constants";
 
 @Component({
 	selector: 'bp-weather-forecast',
@@ -13,6 +14,8 @@ export class WeatherForecastComponent implements AfterViewInit {
 
 	city$: Observable<City>;
 	weatherForecast$: Observable<WeatherForecastData>;
+
+	mode = WeatherForecastMode;
 
 	constructor(public weatherForecastFacade: WeatherForecastFacade) {
 		this.city$ = this.weatherForecastFacade.city$;
