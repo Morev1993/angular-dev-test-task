@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {WeatherForecastFacade} from "../../+state/weather-forecast.facade";
-import {debounceTime, distinctUntilChanged, filter, fromEvent, map, Observable} from "rxjs";
+import {debounceTime, distinctUntilChanged, fromEvent, map, Observable} from "rxjs";
 import { City, WeatherForecastItem } from '../../+state/weather-forecast.models';
 import {WeatherForecastModes} from "../../constants/weather-forecast.constants";
 import { Router } from '@angular/router';
@@ -15,20 +15,16 @@ export class WeatherForecastComponent implements AfterViewInit {
 
 	city$: Observable<City>;
 	mode$: Observable<WeatherForecastModes>;
-	weather$: Observable<WeatherForecastItem[]>;
+	weather$: Observable<WeatherForecastItem[] | undefined>;
 	searchQueryParam$: Observable<string>;
-
-	modesEnum = WeatherForecastModes;
 
 	modes = [WeatherForecastModes.hourly, WeatherForecastModes.daily];
 
 	constructor(public weatherForecastFacade: WeatherForecastFacade, private router: Router) {
 		this.city$ = this.weatherForecastFacade.city$;
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+
 		this.weather$ = this.weatherForecastFacade.weatherForecast$;
 		this.searchQueryParam$ = this.weatherForecastFacade.searchQueryParam$;
-
 		this.mode$ = this.weatherForecastFacade.mode$;
 
 	}
@@ -37,11 +33,8 @@ export class WeatherForecastComponent implements AfterViewInit {
 		this.weatherForecastFacade.loadLocations('');
 
 		fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+			map((event) => (event.target as HTMLInputElement).value),
 			debounceTime(700),
-			filter((event: any) => {
-				return event.target && !!event.target.value;
-			}),
-			map((event: any) => event.target.value),
 			distinctUntilChanged(),
 		).subscribe((value) => {
 			this.weatherForecastFacade.loadLocations(value);

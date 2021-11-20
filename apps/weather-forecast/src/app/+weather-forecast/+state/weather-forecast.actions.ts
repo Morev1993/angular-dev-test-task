@@ -2,11 +2,13 @@ import { createAction, props } from '@ngrx/store';
 import {City, WeatherForecastData} from './weather-forecast.models';
 import { WeatherForecastModes } from '../constants/weather-forecast.constants';
 
-export const loadWeatherForecast = createAction('[WeatherForecast] Load');
+export const loadWeatherForecast = createAction(
+	'[WeatherForecast] Load',
+	props<{ mode: WeatherForecastModes }>());
 
 export const loadWeatherForecastSuccess = createAction(
 	'[WeatherForecast] Load Success',
-	props<{ data: WeatherForecastData }>()
+	props<{ data: WeatherForecastData, mode?: WeatherForecastModes }>()
 );
 
 export const loadWeatherForecastFailure = createAction(
@@ -14,12 +16,14 @@ export const loadWeatherForecastFailure = createAction(
 	props<{ error: any }>()
 );
 
-export const changeMode = createAction('[WeatherForecast] ChangeMode',
+export const changeMode = createAction(
+	'[WeatherForecast] ChangeMode',
 	props<{ mode: WeatherForecastModes }>()
 );
 
 
-export const loadLocations = createAction('[Locations] Load',
+export const loadLocations = createAction(
+	'[Locations] Load',
 	props<{ query: string }>()
 );
 

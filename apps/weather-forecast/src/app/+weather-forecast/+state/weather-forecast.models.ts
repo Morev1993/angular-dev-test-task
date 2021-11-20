@@ -11,7 +11,7 @@ export interface WeatherForecastState {
 	currentCity: City;
 }
 
-export interface WeatherForecastItem {temp: string}
+export interface WeatherForecastItem {temp: string | any}
 
 export type WeatherForecastData = {[key in keyof typeof WeatherForecastModes]?: WeatherForecastItem[] };
 
