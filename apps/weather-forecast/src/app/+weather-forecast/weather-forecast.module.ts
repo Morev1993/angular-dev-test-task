@@ -10,10 +10,12 @@ import { WeatherForecastComponent } from './containers/weather-forecast/weather-
 import {HttpClientModule} from "@angular/common/http";
 import {LocationService} from "./services/location.service";
 import {WeatherService} from "./services/weather.service";
+import { WeatherTableComponent } from './components/weather-table/weather-table.component';
 
 @NgModule({
 	declarations: [
-    WeatherForecastComponent
+    WeatherForecastComponent,
+    WeatherTableComponent
   ],
 	imports: [
 		CommonModule,

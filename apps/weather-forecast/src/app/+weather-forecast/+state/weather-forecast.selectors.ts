@@ -8,7 +8,7 @@ const weatherTransformer = {
 		return items.map(item => {
 			return {
 				...item,
-				temp: item.temp.day ? item.temp.day : item.temp
+				temp: item.temp.day
 			}
 		})
 	},
@@ -26,7 +26,6 @@ export const getWeatherForecastError = createSelector(getWeatherForecastState, (
 export const getAllWeatherItems = createSelector(getWeatherForecastState, (state: State) => {
 	const newState = JSON.parse(JSON.stringify(state));
 	Object.keys(newState.data).forEach((key: string) => {
-
 		if (weatherTransformer[key as WeatherForecastModes] && newState.data[key]) {
 			newState.data[key] = weatherTransformer[key as WeatherForecastModes](newState.data[key]);
 		}

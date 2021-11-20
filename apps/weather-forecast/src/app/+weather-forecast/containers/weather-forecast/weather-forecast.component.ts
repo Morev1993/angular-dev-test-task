@@ -15,7 +15,7 @@ export class WeatherForecastComponent implements AfterViewInit {
 
 	city$: Observable<City>;
 	mode$: Observable<WeatherForecastModes>;
-	weather$: Observable<WeatherForecastItem[] | undefined>;
+	weather$: Observable<WeatherForecastItem[]>;
 	searchQueryParam$: Observable<string>;
 
 	modes = [WeatherForecastModes.hourly, WeatherForecastModes.daily];

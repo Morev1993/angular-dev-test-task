@@ -10,32 +10,7 @@
 		</li>
 	</ul>
 
-	<ng-container>
-		<div class="table-responsive">
-			<table class="table">
-				<thead>
-				<tr>
-					<th [style.minWidth.px]="200">City name</th>
-					<th *ngFor="let item of weather$ | async;"></th>
-				</tr>
-				</thead>
-				<tbody>
-					<ng-container *ngIf="weather$ | async as weather">
-						<tr>
-							<td>{{(city$ | async)?.name}}</td>
-							<td *ngFor="let item of weather">
-								{{item.temp}}
-							</td>
+	<bp-weather-table [weatherData]="weather$ | async" [city]="city$ | async"></bp-weather-table>
 
-						</tr>
-					</ng-container>
-					<ng-container *ngIf="!(weather$ | async)">
-						<tr>
-							<td colspan="6">Not data</td>
-						</tr>
-					</ng-container>
-				</tbody>
-			</table>
-		</div>
 </ng-container>
 

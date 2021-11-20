@@ -1,0 +1,27 @@
+<div class="table-responsive">
+	<table class="table">
+		<thead>
+			<tr>
+				<th [style.minWidth.px]="200">City name</th>
+				<th *ngFor="let item of weatherData"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<ng-container *ngIf="weatherData">
+				<tr>
+					<td>{{city?.name}}</td>
+					<td *ngFor="let item of weatherData">
+						{{item.temp}}
+					</td>
+
+				</tr>
+			</ng-container>
+
+			<ng-container *ngIf="!weatherData">
+				<tr>
+					<td colspan="6">No data</td>
+				</tr>
+			</ng-container>
+		</tbody>
+	</table>
+</div>
