@@ -48,7 +48,7 @@ export class WeatherForecastEffects {
 		)
 	);
 
-	startLoadWeather$ = createEffect(() =>
+	triggerLoadWeather$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(
 				WeatherForecastActions.loadLocationsSuccess,

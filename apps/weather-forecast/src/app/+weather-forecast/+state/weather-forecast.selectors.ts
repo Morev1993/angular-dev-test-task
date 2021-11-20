@@ -1,24 +1,39 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { WEATHER_FORECAST_FEATURE_KEY, State, weatherForecastAdapter } from './weather-forecast.reducer';
+import { WEATHER_FORECAST_FEATURE_KEY, State } from './weather-forecast.reducer';
+import { WeatherForecastModes } from '../constants/weather-forecast.constants';
+import { WeatherForecastItem } from './weather-forecast.models';
 
+const weatherTransformer = {
+	[WeatherForecastModes.daily]: (items: WeatherForecastItem[]) => {
+		return items.map(item => {
+			return {
+				...item,
+				temp: item.temp.day ? item.temp.day : item.temp
+			}
+		})
+	},
+	[WeatherForecastModes.hourly]: (items: WeatherForecastItem[]) => {
+		return items.filter((item, i) => i % 3 && i).slice(0, 8)
+	}
+};
 
 export const getWeatherForecastState = createFeatureSelector<State>(WEATHER_FORECAST_FEATURE_KEY);
 
-const { selectEntities } = weatherForecastAdapter.getSelectors();
-
 export const getWeatherForecastStateData = createSelector(getWeatherForecastState, (state: State) => state);
-
-export const getWeatherForecastLoading = createSelector(getWeatherForecastState, (state: State) => state.loading);
 
 export const getWeatherForecastError = createSelector(getWeatherForecastState, (state: State) => state.error);
 
 export const getAllWeatherItems = createSelector(getWeatherForecastState, (state: State) => {
-	return state.data[state.mode];
-});
+	const newState = JSON.parse(JSON.stringify(state));
+	Object.keys(newState.data).forEach((key: string) => {
 
-export const getWeatherForecastEntities = createSelector(getWeatherForecastState, (state: State) =>
-	selectEntities(state)
-);
+		if (weatherTransformer[key as WeatherForecastModes] && newState.data[key]) {
+			newState.data[key] = weatherTransformer[key as WeatherForecastModes](newState.data[key]);
+		}
+	});
+
+	return newState.data[newState.mode];
+});
 
 export const getCity = createSelector(getWeatherForecastState, (state: State) =>
 	state.currentCity
